@@ -88,6 +88,9 @@ const kindLabel = (k: string) => EMERGENCY_KINDS.find((e) => e.key === k)?.label
 function LobbyPage() {
   const [nameInput, setNameInput] = useState("");
   const [avatar, setAvatar] = useState("");
+  const hasSupabaseConfig = Boolean(
+    import.meta.env["VITE_SUPABASE_URL"] && import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+  );
   useEffect(() => {
     try {
       setAvatar(localStorage.getItem(AVATAR_KEY) ?? "");
@@ -190,6 +193,22 @@ function LobbyPage() {
               </Button>
             </form>
           </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!hasSupabaseConfig) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <Card className="w-full max-w-sm p-6">
+          <h1 className="font-display text-2xl tracking-tight">Chat isn&apos;t connected yet</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY, then restart the app to enable nearby chat.
+          </p>
+          <Button variant="outline" className="mt-5 w-full" onClick={signOut}>
+            Edit name
+          </Button>
         </Card>
       </div>
     );
